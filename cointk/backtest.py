@@ -94,11 +94,13 @@ def backtest(strategy, initial_funds=1000, initial_balance=0, fill_prob=0.5,
     time2 = time.time()
 
     for i, (ts, price, qty) in enumerate(data[:-1]):
+        # print('Doing backtest on i {} ts {} price {} qty {}'.format(
+        #     i, ts, price, qty))
         if verbose > 1 and i % plot_freq == 0:
             print(i, ('worth', worth, 'balance', balance, 'funds', funds))
 
         next_ts, next_price, next_qty = data[i+1]
-        order = strategy.evaluate(ts, price, qty, funds, balance)
+        order = strategy.evaluate(ts, price, qty, funds, balance, data)
         if order is None or order.empty:
             continue
 
@@ -116,7 +118,7 @@ def backtest(strategy, initial_funds=1000, initial_balance=0, fill_prob=0.5,
         if order.buy:
             # we can only guarantee buying if our price is higher than the
             # historical transacted price
-            if not order.price >= next_price:
+            if not order.price >= price:
                 if verbose > 2:
                     print('price too low')
                 strategy.reject_order(order.identifier)
@@ -124,8 +126,12 @@ def backtest(strategy, initial_funds=1000, initial_balance=0, fill_prob=0.5,
             else:
                 # we can only guarantee a quantity based on historical
                 # transactions
-                filled_qty = min(order.qty, next_qty)
-                filled_price = next_price
+                # filled_qty = min(order.qty, next_qty)
+
+                # cancel this limitation for now
+                filled_qty = order.qty
+                
+                filled_price = price
                 if filled_price * filled_qty > funds:
                     if verbose > 2:
                         print('insufficient funds')
@@ -136,14 +142,17 @@ def backtest(strategy, initial_funds=1000, initial_balance=0, fill_prob=0.5,
 
         # try to sell; same limitations apply as above
         if order.sell:
-            if not order.price <= next_price:
+            if not order.price <= price:
                 if verbose > 2:
                     print('price too high')
                 strategy.reject_order(order.identifier)
                 continue
             else:
-                filled_qty = min(order.qty, next_qty)
-                filled_price = next_price
+                # filled_qty = min(order.qty, next_qty)
+
+                # cancel this limitation for now
+                filled_qty = order.qty
+                filled_price = price
                 if filled_qty > balance:
                     if verbose > 2:
                         print('insufficient balance')

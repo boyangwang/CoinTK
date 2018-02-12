@@ -1,7 +1,6 @@
 class Strategy(object):
     '''
         A general strategy framework for deciding when and how much to buy/sell
-
     '''
     def __init__(self):
         self.orders = []
@@ -11,8 +10,8 @@ class Strategy(object):
         self.initial_balance = balance
         self.initial_worth = worth
 
-    def evaluate(self, ts, price, qty, funds, balance):
-        order = self.gen_order(ts, price, qty, funds, balance)
+    def evaluate(self, ts, price, qty, funds, balance, all_prices=None):
+        order = self.gen_order(ts, price, qty, funds, balance, all_prices)
         if order:
             self.orders.append(order)
         return order
@@ -25,3 +24,6 @@ class Strategy(object):
 
     def additional_plots(self, plot_freq=10000, plot_args={}):
         return []
+
+    def gen_order(self, ts, price, qty, funds, balance, all_prices=None):
+        return None
