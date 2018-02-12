@@ -20,11 +20,15 @@ def subarray_with_stride(array, stride):
 def load_data(fnm, name='data', train_prop=0.8,
               val_prop=0.1):
     data = np.load(fnm)[name]
+    print('total data size: ', len(data))
     train_idx = int(len(data) * train_prop)
     train_data = data[:train_idx]
+    print('train data size: ', 0, train_idx)
     val_idx = int(len(data) * (train_prop + val_prop))
     val_data = data[train_idx:val_idx]
+    print('val data size: ', train_idx, val_idx)
     test_data = data[val_idx:]
+    print('test data size: ', val_idx, len(data))
     return train_data, val_data, test_data
 
 
