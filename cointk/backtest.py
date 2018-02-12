@@ -7,12 +7,11 @@ import numpy as np
 import pprint
 from copy import deepcopy
 
-
-# main code for running backtests and graphing results
-
-
+'''
+ main code for running backtests and graphing results
+'''
 def resolve_data(data, fnm, name, datapart,
-                 train_prop=0.8, val_prop=0.1):
+                 train_prop, val_prop):
     '''
         Either read in the dataset or use a caller-provided one
     '''
@@ -54,13 +53,19 @@ def backtest(strategy, initial_funds=1000, initial_balance=0, fill_prob=0.5,
 
 
             plot_args is any additional optional arguments we pass to additonal_plots
+
+        About train, val, test
+
+            By default, it uses validation date set, and that would be the 80% - 90%,
+            in terms of time serie. That's not useful for my use case.
+            So set val=0.15, train=0.85 (that is, ignore=0.85, test=0.15)
     '''
 
     input_args = locals()  # save the input arguments for logging
     strategy_args = deepcopy(strategy.__dict__)
 
     # default to validation
-    data = resolve_data(data, data_fnm, data_name, datapart)
+    data = resolve_data(data, data_fnm, data_name, datapart, val_prop=val_prop, train_prop=train_prop)
     if verbose:
         print("data size: ", data.shape)
     
