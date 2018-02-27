@@ -12,11 +12,11 @@ coinbase_usd_gz = coinbase_usd_csv + '.gz'
 
 def init(force_download=False):
     # get the full dataset if not there
-    if not os.path.exists(coinbase_usd_npz):
+    if not os.path.exists(coinbase_usd_npz) or force_download:
         if not os.path.exists('data'):
             os.makedirs('data')
 
-        if not os.path.exists(coinbase_usd_csv):
+        if not os.path.exists(coinbase_usd_csv) or force_download:
             print('=' * 50)
             print('Downloading coinabse-usd datset...')
             urlretrieve(coinbase_usd_url, coinbase_usd_gz)

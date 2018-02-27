@@ -31,7 +31,7 @@ def backtest(strategy, initial_funds=1000, initial_balance=0, fill_prob=0.5,
              fee=0.0025, data=None, data_fnm='data/coinbaseUSD.npz',
              history_fnm='histories/backtest.npz',
              data_name='data', datapart='val',
-             plot_fnm='temp-plot.html',
+             plot_fnm='temp-plot.html', use_hour_data = False,
              train_prop=0.8, val_prop=0.1, verbose=1, plot_freq=10000, plot_args={}):
 
     '''
