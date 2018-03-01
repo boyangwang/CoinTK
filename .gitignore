@@ -3,6 +3,7 @@ data/*
 *.csv
 *.npz
 !data/*sample.csv
+!data/*vwap_hourly*.csv
 
 *.pyc
 *.pyo
